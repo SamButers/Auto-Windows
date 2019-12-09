@@ -508,7 +508,8 @@ class CPP_Expression(Node):
     elif self.operator:
       self.value[0].print(0, ' ')
       print(self.operator, end=' (')
-      self.value[1].print(0, ')')
+      self.value[1].print(0)
+      print(")", end='')
 
     else:
       print(self.value, end=p_end)
@@ -807,7 +808,7 @@ class CPP_Count(Node):
         raise Exception("Invalid declaration of '{}' in count loop.".format(self.counter_name))
       self.counter = ['declaration', counter_type, self.counter_name]
 
-    self.for_representation = CPP_For(['for', self.counter, ['>=', self.counter_name, self.ending], ['assignment', 'r++', self.counter_name], self.scope], env, scope_type)
+    self.for_representation = CPP_For(['for', self.counter, ['<=', self.counter_name, self.ending], ['assignment', 'r++', self.counter_name], self.scope], env, scope_type)
     self.check(env)
 
   def check(self, env):
