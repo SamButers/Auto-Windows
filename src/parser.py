@@ -234,6 +234,24 @@ class DefaultFunctions {
 			SetCursorPos(x, y);
 		}
 		
+		void click(int x, int y, int mode = 0, float speed = 0) {
+			moveCursor(x, y, mode, speed);
+			
+			input.type = INPUT_MOUSE;
+			input.mi.dx = 0;
+			input.mi.dy = 0;
+			input.mi.time = 0;
+			input.mi.dwExtraInfo = 0;
+			input.mi.mouseData = 0;
+			
+			input.mi.dwFlags = MOUSEEVENTF_LEFTDOWN;
+			SendInput(1, &input, sizeof(INPUT));
+			
+			input.mi.dwFlags = MOUSEEVENTF_LEFTUP;
+			SendInput(1, &input, sizeof(INPUT));
+			Sleep(speed);
+		}
+		
 		void type(string text, float speed) {
 			input.type = INPUT_KEYBOARD;
 			input.ki.time = 0;
