@@ -8,6 +8,7 @@ def main():
 	args_parser.add_argument("-i", "--input", required=True, type=str, help="input file containing the Auto Windows code")
 	args_parser.add_argument("-o", "--output", default="output.cpp", type=str, help="output file containing the C++ code")
 	args_parser.add_argument("-t", "--terminal", action="store_true", help="print to terminal flag")
+	args_parser.add_argument("-d", "--debug", action="store_true", help="print SExpr flag")
 	
 	args = args_parser.parse_args()
 	
@@ -16,6 +17,9 @@ def main():
 	
 	awc_code = grammar.parse(awc_code)
 	awc_code = SExprTransformer().transform(awc_code)
+	
+	if(args.debug):
+		print(awc_code)
 	
 	f = io.StringIO()
 	with redirect_stdout(f):

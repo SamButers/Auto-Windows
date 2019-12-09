@@ -97,7 +97,7 @@ atom: INTEGER
 // Terminals
 INTEGER : /-?\d+/
 FLOAT   : /-?\d+\.\d+/
-STRING  : /"[^"].*[^"]"/
+STRING  : /"[^"]*"/
 CHARACTER : /'[^'].[^']'/
 BOOLEAN : /(TRUE)|(FALSE)/
 VAR_NAME: /[A-Za-z]\w*/
