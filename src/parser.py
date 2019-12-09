@@ -436,13 +436,29 @@ class CPP_Expression(Node):
         args[c] = CPP_Expression(args[c], env)
         args_type.append(args[c].expression_type)
 
-      if(tuple(args_type) not in env[name][1]):
-        if(env[name][1] == (...,)):
-          for arg_type in args_type:
-            if(arg_type not in self.PRINT_READ_AUX):
-              raise Exception("Arguments '{}' are not printable or readable.".format(args))
-        else:
-          raise Exception("Arguments given to '{}' do not match.".format(name))
+      if(env[name][1] == (...,)):
+        for arg_type in args_type:
+          if(arg_type not in self.PRINT_READ_AUX):
+            raise Exception("Arguments '{}' are not printable or readable.".format(args))
+              
+      else:
+        isAccepted = False
+        for arg in env[name][1]:
+          if(len(args_type) != len(arg)):
+            continue
+          isAccepted = True
+          for c in range(len(arg)):
+            if(args_type[c] not in self.legal_assignments[arg[c]]):
+                  isAccepted = False
+                  break
+
+        if(not isAccepted):
+          if(env[name][1] == (...,)):
+            for arg_type in args_type:
+              if(arg_type not in self.PRINT_READ_AUX):
+                raise Exception("Arguments '{}' are not printable or readable.".format(args))
+          else:
+            raise Exception("Arguments given to '{}' do not match.".format(name))
 
       self.expression_type = env[name][0]
       self.arguments = args
