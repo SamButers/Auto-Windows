@@ -1,3 +1,5 @@
 output.cpp
 *.txt
 src/__pycache__
+*.exe
+*.aw

@@ -6,7 +6,8 @@ from contextlib import redirect_stdout
 def main():
 	args_parser = argparse.ArgumentParser(description='Auto Windows Compiler')
 	args_parser.add_argument("-i", "--input", required=True, type=str, help="input file containing the Auto Windows code")
-	args_parser.add_argument("-o", "--output", type=str, help="output file containing the C++ code")
+	args_parser.add_argument("-o", "--output", default="output.cpp", type=str, help="output file containing the C++ code")
+	args_parser.add_argument("-t", "--terminal", action="store_true", help="print to terminal flag")
 	
 	args = args_parser.parse_args()
 	
@@ -23,13 +24,13 @@ def main():
 		
 	output = f.getvalue()
 	
-	if(args.output):
+	if(args.terminal):
+		print(output)
+		
+	else:
 		cpp_file = open(args.output, "w")
 		cpp_file.write(output)
 		cpp_file.close()
-		
-	else:
-		print(output)
 	
 	
 if __name__ == '__main__':
