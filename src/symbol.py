@@ -49,6 +49,8 @@ Symbol.STRING = Symbol('string')
 Symbol.BOOL = Symbol('bool')
 Symbol.ARRAY = Symbol('Array')
 
+Symbol.FILE = Symbol('File')
+
 Symbol.VOID = Symbol('void')
 
 class _Var:

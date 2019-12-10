@@ -16,7 +16,9 @@ class Node():
 		return {
 			Symbol('print'): (None, (...,)),
 			Symbol('read'): (None, (...,)),
-			Symbol('readLine'): (None, ((Symbol.STRING,),)),
+			Symbol('readLine'): (None, ((Symbol.STRING,), (Symbol.FILE, Symbol.STRING))),
+			Symbol('open'): (None, ((Symbol.FILE, Symbol.STRING, Symbol.CHAR),)),
+			Symbol('close'): (None, ((Symbol.FILE, Symbol.CHAR),)),
 			Symbol('moveCursor'): (None, ((Symbol.INT, Symbol.INT), (Symbol.INT, Symbol.INT, Symbol.INT), (Symbol.INT, Symbol.INT, Symbol.INT, Symbol.FLOAT))),
 			Symbol('click'): (None, ((Symbol.INT, Symbol.INT), (Symbol.INT, Symbol.INT, Symbol.INT), (Symbol.INT, Symbol.INT, Symbol.INT, Symbol.FLOAT))),
 			Symbol('type'): (None, ((Symbol.STRING, Symbol.FLOAT),)),
@@ -58,7 +60,8 @@ class Node():
 		Symbol.CHAR,
 		Symbol.STRING,
 		Symbol.BOOL,
-		Symbol.ARRAY
+		Symbol.ARRAY,
+		Symbol.FILE
 	]
 
 	legal_operations = {
@@ -83,10 +86,11 @@ class Node():
 			Symbol.ULINT: INT_AUX,
 			Symbol.USINT: INT_AUX,
 			Symbol.CHAR: INT_AUX,
-			Symbol.BOOL: (Symbol.BOOL),
+			Symbol.BOOL: (Symbol.BOOL,),
 			Symbol.FLOAT: FLOAT_AUX,
 			Symbol.LFLOAT: FLOAT_AUX,
-			Symbol.STRING: (Symbol.STRING,)
+			Symbol.STRING: (Symbol.STRING,),
+			Symbol.FILE: (Symbol.FILE,)
 	}
 
 	reserved_words = [
@@ -102,7 +106,7 @@ class Node():
 		Symbol('AND'),
 		Symbol('and'),
 		Symbol('OR'),
-		Symbol('or')
+		Symbol('or'),
 	]
 
 	std_cpp = [
@@ -119,7 +123,9 @@ class Node():
 		Symbol('MOUSE_Y'),
 		Symbol('SCREEN_H'),
 		Symbol('SCREEN_W'),
-		Symbol('readLine')
+		Symbol('readLine'),
+		Symbol('open'),
+		Symbol('close')
 	]
 
 	comp_op = ['==', '!=', '>', '<', '>=', '<=', Symbol('NOT'), Symbol('AND')]
@@ -152,6 +158,7 @@ class CPP_Code(Node):
 #include <iostream>
 #include <vector>
 #include <cmath>
+#include <fstream>
 
 #define True true
 #define False false
@@ -326,6 +333,72 @@ class DefaultFunctions {
 };
 
 DefaultFunctions DEFAULT_FUNCTIONS;
+
+class File {
+	private:
+		bool inputOpen, outputOpen;
+	
+	public:
+		ifstream input;
+		ofstream output;
+		
+		File() {
+			this->inputOpen = false;
+			this->outputOpen = false;
+		}
+		
+		~File() {
+			if(this->inputOpen)
+				this->input.close();
+			
+			if(this->outputOpen)
+				this->output.close();
+		}
+	
+		void open(string path, char mode) {
+			if(mode == 'r') {
+				if(inputOpen)
+					this->input.close();
+
+				this->input.open(path);
+				if(this->input.is_open())
+					this->inputOpen = true;
+			}
+			
+			if(mode == 'w') {
+				if(outputOpen)
+					this->output.close();
+				
+				this->output.open(path);
+				if(this->output.is_open())
+					this->outputOpen = true;
+			}
+		}
+		
+		void close(char mode) {
+			if(mode == 'r') {
+				if(inputOpen) {
+					this->input.close();
+					this->inputOpen = false;
+				}
+			}
+			
+			if(mode == 'w') {
+				if(outputOpen) {
+					this->output.close();
+					this->outputOpen = false;
+				}
+			}
+		}
+		
+		void readLine(string &a) {
+			getline(this->input, a);
+		}
+		
+		bool end() {
+			return this->input.eof();
+		}
+};
 """)
 
 		for function in self.functions:
@@ -451,7 +524,19 @@ class CPP_Expression(Node):
 				self.value = 'False'
 
 		elif(isinstance(SExpr, str)):
-			self.expression_type = Symbol.STRING
+			if(SExpr[0] == "'"):
+				if(SExpr[1] == '\\'):
+					if(len(SExpr) != 4):
+						raise Exception("{} is not a valid character.".format(SExpr))
+				else:
+					if(len(SExpr) != 3):
+						raise Exception("{} is not a valid character.".format(SExpr))
+				
+				self.expression_type = Symbol.CHAR
+			
+			else:
+				self.expression_type = Symbol.STRING
+				
 			self.value = SExpr
 
 		elif(isinstance(SExpr, Symbol)):
@@ -469,6 +554,14 @@ class CPP_Expression(Node):
 				args_type.append(args[c].expression_type)
 
 			if(env[name][1] == (...,)):
+				if(not len(args_type)):
+					raise Exception("No arguments given to print or read function.")
+					
+				if(args_type[0] == Symbol.FILE):
+					args_type = args_type[1:]
+					if(not len(args_type)):
+						raise Exception("No arguments given to print or read function for a File.")
+					
 				for arg_type in args_type:
 					if(arg_type not in self.PRINT_READ_AUX):
 						raise Exception("Arguments '{}' are not printable or readable.".format(args))
@@ -515,14 +608,27 @@ class CPP_Expression(Node):
 	def print(self, indent, p_end = ''):
 		print("\t" * indent, end='')
 		if(self.value in self.std_cpp):
+			arguments = self.arguments
+			
 			if(self.value == Symbol('print')):
-				print("cout", end='')
-				for argument in self.arguments:
+				if(arguments[0].expression_type == Symbol.FILE):
+					arguments[0].print(0, '.output')
+					arguments = arguments[1:]
+					
+				else:
+					print("cout", end='')
+					
+				for argument in arguments:
 					print(" << ", end='')
 					argument.print(0, '')
 			else:
-				print("cin", end='')
-				for argument in self.arguments:
+				if(arguments[0].expression_type == Symbol.FILE):
+					arguments[0].print(0, '.input')
+					arguments = arguments[1:]
+				else:
+					print("cin", end='')
+					
+				for argument in arguments:
 					print(" >> ", end='')
 					argument.print(0, '')
 
@@ -538,6 +644,32 @@ class CPP_Expression(Node):
 
 			elif(self.value == Symbol('SCREEN_H')):
 				print("DEFAULT_FUNCTIONS.getScreenH()", end=p_end)
+				
+			elif(self.value in (Symbol('open'), Symbol('close'))):
+				arguments = self.arguments
+				
+				arguments[0].print(0, '')
+				print(".{}(".format(self.value), end='')
+				
+				arguments = arguments[1:]
+				for argument in arguments[:-1]:
+					argument.print(0, '')
+					print(", ", end='')
+				arguments[-1].print(0, '')
+				print(")", end=p_end)
+				
+			elif(self.value == Symbol('readLine') and self.arguments[0].expression_type == Symbol.FILE):
+				arguments = self.arguments
+				
+				arguments[0].print(0, '')
+				print(".{}(".format(self.value), end='')
+				
+				arguments = arguments[1:]
+				for argument in arguments[:-1]:
+					argument.print(0, '')
+					print(", ", end='')
+				arguments[-1].print(0, '')
+				print(")", end=p_end)
 
 			else:
 				print("DEFAULT_FUNCTIONS.{}(".format(self.value), end='')
@@ -547,7 +679,7 @@ class CPP_Expression(Node):
 				self.arguments[-1].print(0, '')
 				print(")", end=p_end)
 
-		elif self.arguments:
+		elif(isinstance(self.arguments, list)):
 			print("{}(".format(self.value), end='')
 			for argument in self.arguments:
 				argument.print(0, '')

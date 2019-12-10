@@ -98,7 +98,7 @@ atom: INTEGER
 INTEGER : /-?\d+/
 FLOAT   : /-?\d+\.\d+/
 STRING  : /"[^"]*"/
-CHARACTER : /'[^'].[^']'/
+CHARACTER : /'[^']([^'])?'/
 BOOLEAN : /(TRUE)|(FALSE)/
 VAR_NAME: /[A-Za-z]\w*/
 
@@ -107,7 +107,7 @@ VAR_NAME: /[A-Za-z]\w*/
 PLUS_OP: /[\+-]/
 MUL_OP : /[\/*]/
 POW_OP : /\^/
-COMP_OP : /(==)|(!=)|(>)|(<)|(>=)|(<=)/
+COMP_OP : /(==)|(!=)|(>=)|(<=)|(>)|(<)/
 ASSIGN_OP : /=|(\+=)|(-=)|(\*=)|(\/=)|(&=)/
 INCREMENT_OP: /(\+\+)|(--)/
 LOGICAL_OP: /AND|OR|!/
