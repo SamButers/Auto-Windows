@@ -966,6 +966,7 @@ class CPP_While(Node):
 		print('\t' * indent + "}")
 
 class CPP_Count(Node):
+	env: ChainMap
 	counter: Union[Symbol, Node]
 	beginning: Union[int, Node]
 	ending: Union[int, Node]
@@ -983,13 +984,14 @@ class CPP_Count(Node):
 			self.counter = ['assignment', '=', self.counter_name, self.beginning]
 		else:
 			try:
-				counter_type, self.counter_name = self.counter
+				_, counter_type, self.counter_name = self.counter
 			except:
-				raise Exception("Invalid declaration of '{}' in count loop.".format(self.counter_name))
-			self.counter = ['declaration', counter_type, self.counter_name]
+				raise Exception("Invalid counter in count loop.".format(self.counter_name))
+			self.counter = ['declaration', counter_type, self.counter_name, '=', self.beginning]
 
 		self.for_representation = CPP_For(['for', self.counter, ['<=', self.counter_name, self.ending], ['assignment', 'r++', self.counter_name], self.scope], env, scope_type)
-		self.check(env)
+		self.env = self.for_representation.env
+		self.check(self.env)
 
 	def check(self, env):
 		if(env[self.counter_name] not in self.legal_assignments[Symbol.INT]):
