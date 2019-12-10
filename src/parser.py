@@ -16,7 +16,8 @@ class Node():
 		return {
 			Symbol('print'): (None, (...,)),
 			Symbol('read'): (None, (...,)),
-			Symbol('moveCursor'): (None, ((Symbol.INT, Symbol.INT), (Symbol.INT, Symbol.INT, Symbol.INT), (Symbol.INT, Symbol.INT, Symbol.INT, Symbol.FLOAT))), #Needs to add multiple parameters later
+			Symbol('readLine'): (None, ((Symbol.STRING,),)),
+			Symbol('moveCursor'): (None, ((Symbol.INT, Symbol.INT), (Symbol.INT, Symbol.INT, Symbol.INT), (Symbol.INT, Symbol.INT, Symbol.INT, Symbol.FLOAT))),
 			Symbol('click'): (None, ((Symbol.INT, Symbol.INT), (Symbol.INT, Symbol.INT, Symbol.INT), (Symbol.INT, Symbol.INT, Symbol.INT, Symbol.FLOAT))),
 			Symbol('type'): (None, ((Symbol.STRING, Symbol.FLOAT),)),
 			Symbol('sleep'): (None, ((Symbol.INT,),)),
@@ -117,7 +118,8 @@ class Node():
 		Symbol('MOUSE_X'),
 		Symbol('MOUSE_Y'),
 		Symbol('SCREEN_H'),
-		Symbol('SCREEN_W')
+		Symbol('SCREEN_W'),
+		Symbol('readLine')
 	]
 
 	comp_op = ['==', '!=', '>', '<', '>=', '<=', Symbol('NOT'), Symbol('AND')]
@@ -314,6 +316,12 @@ class DefaultFunctions {
 					Sleep(speed);
 				}
 			}
+		}
+		
+		void readLine(string &a) {
+			do {
+				getline(cin, a);
+			} while(!a.length());
 		}
 };
 
