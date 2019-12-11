@@ -53,34 +53,40 @@ return: "return" expression? -> return_expression
 // VALUES need to be FLOAT or INTEGER or result in one of those (not treated here)
 ?count: "count" (VAR_NAME|declaration)? "from" expression "to" expression scope
 
-?while: "while" ((conditions)|("(" conditions ")")) scope -> while_loop
+?while: "while" ((or_condition)|("(" or_condition ")")) scope -> while_loop
 
 // Not all statements are allowed, such as return, loops or conditionals (treated here)
-// ?for: "for" (declaration|assignment|expression)? ";" conditions ";" (declaration|assignment|expression)? scope -> for_loop
-//    | "for" "(" (declaration|assignment|expression)? ";" conditions ";" (declaration|assignment|expression)? ")" scope -> for_loop
+// ?for: "for" (declaration|assignment|expression)? ";" or_condition ";" (declaration|assignment|expression)? scope -> for_loop
+//    | "for" "(" (declaration|assignment|expression)? ";" or_condition ";" (declaration|assignment|expression)? ")" scope -> for_loop
 
-?for: "for" ";" conditions ";" scope -> minimal_for
-    | "for" "(" ";" conditions ";" ")" scope -> minimal_for
-    | "for" (declaration|assignment|expression) ";" conditions ";" scope -> left_for
-    | "for" "(" (declaration|assignment|expression) ";" conditions ";" ")" scope -> left_for
-    | "for" ";" conditions ";" (declaration|assignment|expression) scope -> right_for
-    | "for" "(" ";" conditions ";" (declaration|assignment|expression) ")" scope -> right_for
-    | "for" (declaration|assignment|expression) ";" conditions ";" (declaration|assignment|expression) scope -> for_loop
-    | "for" "(" (declaration|assignment|expression) ";" conditions ";" (declaration|assignment|expression) ")" scope -> for_loop
+?for: "for" ";" or_condition ";" scope -> minimal_for
+    | "for" "(" ";" or_condition ";" ")" scope -> minimal_for
+    | "for" (declaration|assignment|expression) ";" or_condition ";" scope -> left_for
+    | "for" "(" (declaration|assignment|expression) ";" or_condition ";" ")" scope -> left_for
+    | "for" ";" or_condition ";" (declaration|assignment|expression) scope -> right_for
+    | "for" "(" ";" or_condition ";" (declaration|assignment|expression) ")" scope -> right_for
+    | "for" (declaration|assignment|expression) ";" or_condition ";" (declaration|assignment|expression) scope -> for_loop
+    | "for" "(" (declaration|assignment|expression) ";" or_condition ";" (declaration|assignment|expression) ")" scope -> for_loop
 
 // Switch pending
 ?conditional: if
 
-?if: "if" ((conditions)|("(" conditions ")")) scope else? -> if_conditional
+?if: "if" ((or_condition)|("(" or_condition ")")) scope else? -> if_conditional
 
 ?else: "else" (if|scope) -> else_conditional
 
-?conditions: condition (LOGICAL_OP conditions)*
-           | "(" condition (LOGICAL_OP conditions)* ")"
+?or_condition: and_condition ("OR" and_condition)*
 
-?condition: expression (COMP_OP expression)?
-          | expression COMP_OP expression COMP_OP expression
+?and_condition: not_condition ("AND" not_condition)*
 
+not_condition: /NOT/? (condition)
+
+?condition : condition_expression (COMP_OP condition_expression)?
+		   | condition_expression COMP_OP condition_expression COMP_OP condition_expression -> composite_condition
+
+?condition_expression : expression
+					  | "(" or_condition ")"
+					  
 // (2 + 3) * x not working
 atom: INTEGER
      | FLOAT
@@ -110,7 +116,8 @@ POW_OP : /\^/
 COMP_OP : /(==)|(!=)|(>=)|(<=)|(>)|(<)/
 ASSIGN_OP : /=|(\+=)|(-=)|(\*=)|(\/=)|(&=)/
 INCREMENT_OP: /(\+\+)|(--)/
-LOGICAL_OP: /AND|OR|!/
+LOGICAL_OP: /AND|OR/
+UNARY_OP : /NOT/
 
 
 %ignore /\s+/

@@ -128,7 +128,9 @@ class Node():
 		Symbol('close')
 	]
 
-	comp_op = ['==', '!=', '>', '<', '>=', '<=', Symbol('NOT'), Symbol('AND')]
+	comp_op = ['==', '!=', '>', '<', '>=', '<=', Symbol('OR'), Symbol('AND')]
+	
+	unary_op = [Symbol('NOT')]
 
 class CPP_Code(Node):
 	functions: list
@@ -164,6 +166,7 @@ class CPP_Code(Node):
 #define False false
 #define AND &&
 #define OR ||
+#define NOT !
 
 typedef long int Lint;
 typedef short int Sint;
@@ -508,20 +511,17 @@ class CPP_Expression(Node):
 		self.arguments = None
 		self.operator = None
 
-		if(isinstance(SExpr, int)):
+		if(isinstance(SExpr, bool)):
+			self.expression_type = Symbol.BOOL
+			self.value = SExpr
+
+		elif(isinstance(SExpr, int)):
 			self.expression_type = Symbol.INT
 			self.value = SExpr
 
 		elif(isinstance(SExpr, float)):
 			self.expression_type = Symbol.FLOAT
 			self.value = SExpr
-
-		elif(isinstance(SExpr, bool)):
-			self.expression_type = Symbol.BOOL
-			if(SExpr):
-				self.value = 'True'
-			else:
-				self.value = 'False'
 
 		elif(isinstance(SExpr, str)):
 			if(SExpr[0] == "'"):
@@ -901,6 +901,12 @@ class CPP_Condition(Node):
 			self.expression_one = CPP_Expression(SExpr, env)
 			self.expression_two = None
 			self.operator = None
+			
+		elif(SExpr[0] in self.unary_op):
+			self.operator, self.expression_one = SExpr
+			
+			self.expression_one = CPP_Condition(self.expression_one, env)
+			self.expression_two = None
 
 		elif(SExpr[0] not in self.comp_op):
 			self.expression_one = CPP_Expression(SExpr, env)
@@ -928,19 +934,30 @@ class CPP_Condition(Node):
 	def print(self, indent, p_end=''):
 		print('\t' * indent, end='')
 		
-		if(isinstance(self.expression_one, Node)):
-			self.expression_one.print(0)
+		if(self.operator == Symbol('NOT')):
+			print("({}".format(Symbol('NOT')), end=' ')
+			if(isinstance(self.expression_one, Node)):
+				self.expression_one.print(0)
+			else:
+				print(self.expression_one, end='')
+			print(")", end='')
+			
 		else:
-			print("({})".format(self.expression_one), end='')
-		
-		if(self.operator):
-			print(" {} ".format(self.operator), end='')
+			if(isinstance(self.expression_one, Node)):
+				self.expression_one.print(0)
+			else:
+				print(self.expression_one, end='')
+			
+			if(self.operator):
+				print(" {} ".format(self.operator), end='')
 
-		if(isinstance(self.expression_two, Node)):
-			self.expression_two.print(0)
-		else:
 			if(self.expression_two):
-				print("({})".format(self.expression_two), end='')
+				print("(", end='')
+				if(isinstance(self.expression_two, Node)):
+					self.expression_two.print(0)
+				else:
+					print("{}".format(self.expression_two), end='')
+				print(")", end='')
 
 class CPP_While(Node):
 	env: ChainMap

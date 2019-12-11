@@ -118,22 +118,30 @@ class SExprTransformer(InlineTransformer):
 			return next
 
 		return ['else', next]
-
-	def conditions(self, *args):
-		args = list(args)
-		if(len(args) == 1):
-			return args
-
-		return [Symbol(str(args[1])), args[0], args[2]]
-
-	def condition(self, *args):
-		if(len(args) == 5):
-			return [Symbol('AND'), [Symbol(str(args[1])), args[0], args[2]], [Symbol(str(args[3])), args[2], args[4]]]
-
-		if(len(args) == 1):
-			return [args[0]]
-
-		return [str(args[1]), args[0], args[2]]
+		
+	def or_condition(self, condition, *conditions):
+		for cond in conditions:
+			condition = [Symbol('OR'), condition, cond]
+			
+		return condition
+		
+	def and_condition(self, condition, *conditions):
+		for cond in conditions:
+			condition = [Symbol('AND'), condition, cond]
+			
+		return condition
+		
+	def not_condition(self, *args):
+		if(len(args) == 2):
+			return [Symbol('NOT'), args[1]]
+			
+		return args[0]
+		
+	def condition(self, expressionOne, op, expressionTwo):
+		return [str(op), expressionOne, expressionTwo]
+		
+	def composite_condition(self, expressioneOne, opOne, expressionTwo, opTwo, expressionThree):
+		return [Symbol('AND'), [Symbol(str(opOne)), expressionOne, expressionTwo], [Symbol(str(opTwo)), expressionTwo, expressionThree]]
 
 	def return_expression(self, *expression):
 		if(len(expression)):
