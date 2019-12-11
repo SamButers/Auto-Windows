@@ -21,6 +21,7 @@ class Node():
 			Symbol('close'): (None, ((Symbol.FILE, Symbol.CHAR),)),
 			Symbol('moveCursor'): (None, ((Symbol.INT, Symbol.INT), (Symbol.INT, Symbol.INT, Symbol.INT), (Symbol.INT, Symbol.INT, Symbol.INT, Symbol.FLOAT))),
 			Symbol('click'): (None, ((Symbol.INT, Symbol.INT), (Symbol.INT, Symbol.INT, Symbol.INT), (Symbol.INT, Symbol.INT, Symbol.INT, Symbol.FLOAT))),
+			Symbol('getKeyState'): (Symbol.INT, ((Symbol.STRING,),)),
 			Symbol('type'): (None, ((Symbol.STRING, Symbol.FLOAT),)),
 			Symbol('sleep'): (None, ((Symbol.INT,),)),
 			Symbol('sin'): (Symbol.FLOAT, ((Symbol.FLOAT,),)),
@@ -125,12 +126,15 @@ class Node():
 		Symbol('SCREEN_W'),
 		Symbol('readLine'),
 		Symbol('open'),
-		Symbol('close')
+		Symbol('close'),
+		Symbol('getKeyState')
 	]
 
 	comp_op = ['==', '!=', '>', '<', '>=', '<=', Symbol('OR'), Symbol('AND')]
 	
 	unary_op = [Symbol('NOT')]
+	
+	virtual_keys = ["VK_ESCAPE"]
 
 class CPP_Code(Node):
 	functions: list
@@ -252,7 +256,41 @@ class DefaultFunctions {
 			SetCursorPos(x, y);
 		}
 		
-		void click(int x, int y, int mode = 0, float speed = 0) {
+		void click(int x, int y) {
+			moveCursor(x, y);
+			
+			input.type = INPUT_MOUSE;
+			input.mi.dx = 0;
+			input.mi.dy = 0;
+			input.mi.time = 0;
+			input.mi.dwExtraInfo = 0;
+			input.mi.mouseData = 0;
+			
+			input.mi.dwFlags = MOUSEEVENTF_LEFTDOWN;
+			SendInput(1, &input, sizeof(INPUT));
+			
+			input.mi.dwFlags = MOUSEEVENTF_LEFTUP;
+			SendInput(1, &input, sizeof(INPUT));
+		}
+		
+		void click(int x, int y, int mode) {
+			moveCursor(x, y, mode);
+			
+			input.type = INPUT_MOUSE;
+			input.mi.dx = 0;
+			input.mi.dy = 0;
+			input.mi.time = 0;
+			input.mi.dwExtraInfo = 0;
+			input.mi.mouseData = 0;
+			
+			input.mi.dwFlags = MOUSEEVENTF_LEFTDOWN;
+			SendInput(1, &input, sizeof(INPUT));
+			
+			input.mi.dwFlags = MOUSEEVENTF_LEFTUP;
+			SendInput(1, &input, sizeof(INPUT));
+		}
+		
+		void click(int x, int y, int mode, float speed) {
 			moveCursor(x, y, mode, speed);
 			
 			input.type = INPUT_MOUSE;
@@ -670,6 +708,13 @@ class CPP_Expression(Node):
 					print(", ", end='')
 				arguments[-1].print(0, '')
 				print(")", end=p_end)
+				
+			elif(self.value == Symbol('getKeyState')):
+				print("GetAsyncKeyState(", end='')
+				if(self.arguments[0].value[1:-1] not in self.virtual_keys):
+					raise Exception("{} is not a valid virtual key.".format(self.arguments[0].value))
+				print(self.arguments[0].value[1:-1], end='')
+				print(")", end='')
 
 			else:
 				print("DEFAULT_FUNCTIONS.{}(".format(self.value), end='')
