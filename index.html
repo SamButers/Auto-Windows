@@ -7,13 +7,33 @@
   <meta name="description" content="Description">
   <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
   <link rel="stylesheet" href="//unpkg.com/docsify/lib/themes/vue.css">
+  <style>
+	@import url('https://fonts.googleapis.com/css?family=Quicksand&display=swap');
+	
+	.line {
+		border-bottom: 1px solid #e3e3e3 !important;
+	}
+	
+	h1, h2, h3, h4, h5, h6 {
+		font-family: Quicksand, Source Sans Pro, Helvetica Neue, Arial, sans-serif;
+	}
+	
+	h1 {
+		font-size: 36px !important;
+	}
+	
+	p {
+		font-size: 18px !important;
+	}
+  </style>
 </head>
 <body>
   <div id="app"></div>
   <script>
     window.$docsify = {
-      name: '',
-      repo: ''
+      name: 'Auto Windows',
+      repo: '',
+	  relativePath: true
     }
   </script>
   <script src="//unpkg.com/docsify/lib/docsify.min.js"></script>
