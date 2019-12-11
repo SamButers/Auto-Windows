@@ -211,7 +211,7 @@ class DefaultFunctions {
 		}
 		
 		void moveCursor(int x, int y) {
-				SetCursorPos(x, y);
+			SetCursorPos(x, y);
 		}
 		
 		void moveCursor(int x, int y, int mode) {
