@@ -52,3 +52,6 @@ STRUCT_NAME myStructure;</p>
 
 ## Uint
 <p align="justify">&emsp;&emsp;The unsigned int (Uint) type is yet to be implemented completely, being forgotten during the development process by mistake.</p>
+
+## More getKeyState keys
+<p align="justify">&emsp;&emsp;Currently, the only key the getKeyState function accepts is the Escape key. More keys are yet to be implemented, possibly all the keyboard keys or at least most of them.</p>

@@ -28,14 +28,16 @@
 ## Native functions
 <p align="justify">&emsp;&emsp;Auto Windows has a set of built-in functions, which are as follow:</p>
 
-- read(var1, var2, ...): Reads from stdin and writes value to the variables in order.
-- print(value1, value2, ...): Prints each value to stdout. Allowed values are integers, floats, characters, strings and boolean. No line-break character is added at the end.
+- read(var1, var2, ...): Reads from stdin and writes value to the variables in order. If the first argument is a File, it reads from the given File instead.
+- print(value1, value2, ...): Prints each value to stdout. Allowed values are integers, floats, characters, strings and boolean. No line-break character is added at the end. If the first argument is a File, it writes to the given File instead.
+- readLine(file, string): Reads a line from the given File and stores it in the given string. If no file is given, it reads the line from stdin.
 - moveCursor(x, y, mode, speed): Moves the mouse to the specified x and y position. Both mode and speed arguments are optional. If mode is given and is equal to 1, the cursor is moved relative to its current position, otherwise it moves the cursor relative to the screen. The speed is a value ranging from 0 to 1, the former moving the cursor instantly and the latter moving the cursor at the slowest defined speed.
 - click(x, y, mode, speed): Clicks at the specified x and y position. The arguments work the same way as in the moveCursor function.
 - type(string, speed): Sends the given string input as keyboard input. The input is sent instantly when speed is equal to 0 or lower.
 - sleep(ms): Sleeps the program for the time given in milliseconds.
 - open(file, path, mode): Opens the file identified by the path string, for the operation specified at mode, and associates it with the File variable given. For reading operations, mode should be equal to 'r', and for writing operations, mode should be equal to 'w'.
 - close(file, mode): Dissociates the File variable given to a previous association with a file for the specified mode. The mode works the same way as the open function.
+- getKeyState(key): Returns 1 if the key has been pressed and 0 if it wasn't. The only key available at the moment is Escape referenced as a "VK_ESCAPE" string.
 - sin(x): Returns sin of x.
 - cos(x): Returns cos of x.
 - tan(x): Returns tan of x.
