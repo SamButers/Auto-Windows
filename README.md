@@ -3,7 +3,9 @@
 
 <p align="justify">&emsp;&emsp;Auto Windows is a small and on-going project of a language inspired by the C, C++ and Autohotkey languages. It has built-in functions to control inputs on your machine, such as keyboard and mouse.
 <br>
-&emsp;&emsp;The Auto Windows Compiler, AWC for short, was made using the Python language, turning Auto Windows code into C++ code. All codes produced by this language use the Win32 API, being, by consequence, mainly supported on the Windows platform.</p>
+&emsp;&emsp;The Auto Windows Compiler, AWC for short, was made using the Python language, turning Auto Windows code into C++ code. All codes produced by this language use the Win32 API, being, by consequence, mainly supported on the Windows platform.
+<br>
+&emsp;&emsp;Information about planned implementations and about the samples can be found by navigating to Pending and Samples.</p>
 
 ## Native types	
 <p align="justify">&emsp;&emsp;Just like any other language, Auto Windows has a set of types that comes with the language. The native types are as follow:</p>
@@ -123,4 +125,3 @@
 | AND | Logical AND | a AND b |
 | OR | Logical OR | a OR b |
 | NOT | Logical NOT | NOT a |
-
