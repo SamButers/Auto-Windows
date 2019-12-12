@@ -55,3 +55,6 @@ STRUCT_NAME myStructure;</p>
 
 ## More getKeyState keys
 <p align="justify">&emsp;&emsp;Currently, the only key the getKeyState function accepts is the Escape key. More keys are yet to be implemented, possibly all the keyboard keys or at least most of them.</p>
+
+## -gpp flag
+<p align="justify">&emsp;&emsp;A -gpp flag is yet to be added. Its function is to automatically compile the C++ code to an executable if the g++ compiler is available.</p>
