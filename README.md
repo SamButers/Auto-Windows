@@ -71,3 +71,18 @@
 	}</p><br>
 	The for loop iterates as long as the CONDITION is TRUE. At the start of the loop, the for loop executes the statement at STARTING_STATEMENT once. At the end of each iteration, the for loop executes the statement at FINAL_STATEMENT. Statements do not include other loops or conditional structures. Parenthesis are optional.</li>
 </ul>
+
+## Conditionals
+<p align="justify">&emsp;&emsp;The following conditionals are present in Auto Windows:</p>
+<ul>
+	<li>if ... : The if condition follows the following syntax:<br>
+	<p align="center" style="font-family: Source Code Pro;">if CONDITION {<br>
+	[...]<br>
+	}<br>
+	<br>
+	else {<br>
+	[...]<br>
+	}<br>
+	</p><br>
+	The count loop iterates from VALUE1 to VALUE2, including both ends, and stores the value of each iteration in the variable or declaration specified at VAR_NAME, which is optional.</li>
+</ul>
