@@ -90,6 +90,9 @@
 	</p><br>
 	The if … else conditional executes the scope inside if if the condition is true, otherwise it executes the scope inside else. Parenthesis for the CONDITION are optional.</li>
 </ul>
+<p align="justify">&emsp;&emsp;The conditions, in the conditional and loop statements, can be done in two ways: a simple condition or a composite condition. The following example show the same condition written in the two different ways, respectively:</p>
+<p align="center" style="font-family: Source Code Pro;">a > x AND x > b</p>
+<p align="center" style="font-family: Source Code Pro;">a > x > b</p>
 
 ## Functions
 <p align="justify">&emsp;&emsp;The language allows for the creation of functions, which shall follow the following syntax:</p>
