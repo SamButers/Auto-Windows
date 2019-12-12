@@ -43,3 +43,31 @@
 - sqrt(x): Returns square root of x.
 - ln(x): Returns natural logarithm of x.
 - log(x): Returns common logarithm of x.
+
+## Global Variables
+<p align="justify">&emsp;&emsp;Auto Windows also contains the following global variables:</p>
+
+- MOUSE_X: Current cursor X position.
+- MOUSE_Y: Current cursor Y position.
+- SCREEN_W: Current screen width.
+- SCREEN_H: Current screen height.
+
+## Loop
+<p align="justify">&emsp;&emsp;Auto Windows contains three loop structures, those being:</p>
+<ul>
+	<li>count loop: The count loop follows the following syntax:<br>
+	<p align="center" style="font-family: Source Code Pro;">count VAR_NAME from VALUE1 to VALUE2 {<br>
+	[...]<br>
+	}</p><br>
+	The count loop iterates from VALUE1 to VALUE2, including both ends, and stores the value of each iteration in the variable or declaration specified at VAR_NAME, which is optional.</li>
+	<li>while loop: The while loop follows the following syntax:<br>
+	<p align="center" style="font-family: Source Code Pro;">while CONDITION {<br>
+	[...]<br>
+	}</p><br>
+	The while loop iterates as long as the CONDITION is TRUE. Parentheses around the CONDITION are optional.</li>
+	<li>for loop: The for loop follows the following syntax:<br>
+	<p align="center" style="font-family: Source Code Pro;">for STARTING_STATEMENT; CONDITION; FINAL_STATEMENT {<br>
+	[...]<br>
+	}</p><br>
+	The for loop iterates as long as the CONDITION is TRUE. At the start of the loop, the for loop executes the statement at STARTING_STATEMENT once. At the end of each iteration, the for loop executes the statement at FINAL_STATEMENT. Statements do not include other loops or conditional structures. Parenthesis are optional.</li>
+</ul>
