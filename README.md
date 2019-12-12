@@ -84,5 +84,43 @@
 	[...]<br>
 	}<br>
 	</p><br>
-	The count loop iterates from VALUE1 to VALUE2, including both ends, and stores the value of each iteration in the variable or declaration specified at VAR_NAME, which is optional.</li>
+	The if … else conditional executes the scope inside if if the condition is true, otherwise it executes the scope inside else. Parenthesis for the CONDITION are optional.</li>
 </ul>
+
+## Functions
+<p align="justify">&emsp;&emsp;The language allows for the creation of functions, which shall follow the following syntax:</p>
+<p align="center" style="font-family: Source Code Pro;">RETURN_TYPE FUNCTION_NAME(ARG1_TYPE ARG1_NAME, [...]) {<br>
+	[...]<br>
+}</p>
+<p align="justify">&emsp;&emsp;The function RETURN_TYPE specifies what type of data the function returns, the FUNCTION_NAME specifies the name which the function will be referred to be called and the ARG_TYPE and ARG_NAME refers to the the type and name of each argument passed to the function which are passed as copies.
+</p>
+
+## Main function
+<p align="justify">&emsp;&emsp;All algorithms need to contain a function named main, which, currently, needs to be of the type int, which will be the starting point for the entire algorithm.</p>
+
+## Operators
+<p align="justify">&emsp;&emsp;The language has many operators which are common with other programming languages, which include all of the following:</p>
+
+| Operator | Function | Syntax |
+|-|-|-|
+| + | Addition | a + b |
+| - | Subtraction | a - b |
+| * | Product | a * b |
+| / | Division | a / b |
+| = | Assignment | a = b |
+| += | Assignment by sum | a += b |
+| -= | Assignment by subtraction | a -= b |
+| *= | Assignment by product | a *= b |
+| /= | Assignment by division | a /= b |
+| ++ | Increment | a++ |
+| -- | Decrement | a-- |
+| == | Equal to | a == b |
+| != | Not equal to | a != b |
+| > | Greater than | a > b |
+| < | Less than | a < b |
+| >= | Greater than or equal to | a >= b |
+| <= | Less than or equal to | a <= b |
+| AND | Logical AND | a AND b |
+| OR | Logical OR | a OR b |
+| NOT | Logical NOT | NOT a |
+
