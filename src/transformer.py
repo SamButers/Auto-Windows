@@ -140,7 +140,7 @@ class SExprTransformer(InlineTransformer):
 	def condition(self, expressionOne, op, expressionTwo):
 		return [str(op), expressionOne, expressionTwo]
 		
-	def composite_condition(self, expressioneOne, opOne, expressionTwo, opTwo, expressionThree):
+	def composite_condition(self, expressionOne, opOne, expressionTwo, opTwo, expressionThree):
 		return [Symbol('AND'), [Symbol(str(opOne)), expressionOne, expressionTwo], [Symbol(str(opTwo)), expressionTwo, expressionThree]]
 
 	def return_expression(self, *expression):
